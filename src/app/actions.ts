@@ -57,6 +57,19 @@ export async function addNewProject(prevState: any, formData: FormData) {
     }
 
     try {
+
+        const existingHandle = await prisma.project.findUnique({
+            where: {
+                handle: validateFields.data?.handle,
+            },
+        });
+
+        if (existingHandle) {
+            return {
+                status: "error",
+                message: "The handle is already in use. Please choose a unique handle.",
+            };
+        }
         const data = await prisma.project.create({
             data: {
                 name: validateFields.data?.name,

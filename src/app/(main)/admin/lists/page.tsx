@@ -1,4 +1,4 @@
-'use client'
+
 
 import { Button } from "@/components/ui/button"
 import { Plus, MessageSquare, Settings, User } from 'lucide-react'
@@ -7,12 +7,25 @@ import { ProjectCard } from "@/app/components/ProjectCard"
 import { redirect } from "next/navigation"
 import { Logo } from "../../../../../public/logo"
 import { AddProject } from "@/app/components/AddProject"
+import { requireUser } from "@/app/utils/hooks"
+import prisma from "@/app/utils/db"
 
-export default function Dashboard() {
+const getProjects = async (userId: string) => {
+  const data = await prisma.project.findMany({
+    where: {
+      userId: userId,
+    }
+  })
+
+  return data
+}
+export default async function Dashboard() {
+  const session = await requireUser()
+  const projects = await getProjects(session.user?.id as string)
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
-      <nav className="flex w-[240px] m-4 flex-col border rounded-lg">
+      {/* <nav className="flex w-[240px] m-4 flex-col bg-card border rounded-lg">
         <div className="flex h-14 items-center gap-2 px-4">
           <Logo />
           <span className="font-medium">Waitless</span>
@@ -53,7 +66,7 @@ export default function Dashboard() {
           </Button>
 
         </div>
-      </nav>
+      </nav> */}
 
       {/* Main Content */}
       <main className="flex-1 border-l">
@@ -63,16 +76,18 @@ export default function Dashboard() {
         </header>
 
         <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-3">
-          <ProjectCard
-            name="waitlist"
-            totalSignUps={0}
-            last24h={0}
-          />
-          <ProjectCard
-            name="RefFollowUp"
-            totalSignUps={1}
-            last24h={0}
-          />
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              id={project.id}
+              name={project.name}
+              handle={project.handle}
+              description={project.description}
+              logo={project.logo}
+              totalSignUps={0}
+              last24h={0}
+            />
+          ))}
         </div>
       </main>
     </div>
