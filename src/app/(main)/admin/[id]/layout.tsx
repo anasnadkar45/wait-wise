@@ -10,15 +10,14 @@ export default async function ProjectLayout({
 }) {
     const { user } = await requireUser();
     return (
-        <div className="w-screen h-screen flex custom-scrollbar scroll-smooth">
+        <div className="w-screen h-screen bg-background flex custom-scrollbar scroll-smooth">
             <div className="m-3 hidden md:flex flex-col">
-                <Sidebar userId={user?.id} />
+                <Sidebar userId={user?.id as string} />
             </div>
-            <div className="w-full">
-                <ScrollArea className="h-[100vh] md:h-[100vh] pb-16 md:pb-0">
-                    {children}
-                </ScrollArea>
-            </div>
+            <ScrollArea className="h-[calc(100vh-1.5rem)] w-full m-3 p-4 bg-card border rounded-xl custom-scrollbar scroll-smooth">
+                {children}
+            </ScrollArea>
+
         </div>
     );
 }

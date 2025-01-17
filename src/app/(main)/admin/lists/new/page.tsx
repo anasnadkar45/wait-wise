@@ -10,7 +10,7 @@
 // import { parseWithZod } from '@conform-to/zod'
 // import { redirect } from 'next/navigation'
 
-import { AddProject } from "@/app/components/AddProject"
+import { AddProject } from "@/app/components/project/AddProject"
 
 
 // const page = () => {

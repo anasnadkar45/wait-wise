@@ -85,11 +85,17 @@ model Authenticator {
 }
 
 model Project {
-  id          String  @id @unique @default(cuid())
-  name        String
-  description String
-  handle      String  @unique
-  logo        String
-  User        User?   @relation(fields: [userId], references: [id])
-  userId      String?
+  id           String       @id @unique @default(cuid())
+  name         String
+  description  String
+  handle       String       @unique
+  logo         String
+  waitListCode CategoryType @default(Green)
+  User         User?        @relation(fields: [userId], references: [id])
+  userId       String?
+}
+
+enum CategoryType {
+  Green
+  Black
 }

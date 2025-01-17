@@ -26,6 +26,9 @@ const projectSchema = z.object({
         .min(3, { message: "The description has to be a minimum character length of 3" }),
     handle: z
         .string()
+        .min(3, { message: "The handle has to be a minimum character length of 3" })
+        .regex(/^[a-zA-Z0-9]+$/, { message: "The handle can only contain letters and numbers without spaces" }),
+    waitListCode: z.string()
         .min(3, { message: "The description has to be a minimum character length of 3" }),
     logo: z.string(),
 });
@@ -45,6 +48,7 @@ export async function addNewProject(prevState: any, formData: FormData) {
         name: formData.get('name'),
         description: formData.get('description'),
         handle: formData.get('handle'),
+        waitListCode: formData.get('waitListCode'),
         logo: formData.get('logo'),
     })
 
@@ -75,6 +79,7 @@ export async function addNewProject(prevState: any, formData: FormData) {
                 name: validateFields.data?.name,
                 description: validateFields.data?.description,
                 handle: validateFields.data?.handle,
+                waitListCode:validateFields.data.waitListCode,
                 logo: validateFields.data?.logo,
                 userId: user.id
             }

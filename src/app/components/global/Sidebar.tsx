@@ -1,54 +1,77 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Crown, HomeIcon, Settings, Goal, HelpCircle, Network, BrainCircuitIcon, Globe, UserCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { HomeIcon, Settings, UserCircle } from 'lucide-react'
+import { FaAnglesLeft } from "react-icons/fa6";
 import { cn } from '@/lib/utils'
-import { Logo } from '../../../../public/logo'
-import { SubmitButton } from '../SubmitButton'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '@/app/utils/store/store'
+import Image from 'next/image'
+import { selectProject } from '@/app/utils/store/features/project/projectSlice'
+import { ModeToggle } from '../theme/ModeToggle'
 
 interface userProps {
     userId: string
 }
 
-
-
 export function Sidebar({ userId }: userProps) {
     const pathname = usePathname()
-    const projectId = pathname.split('/')[2]
+    const project = useSelector((state: RootState) => state.project.selectedProject)
+    const dispatch = useDispatch()
+    const [isClient, setIsClient] = useState(false)
+
+    useEffect(() => {
+        // Ensure this only runs on the client side
+        setIsClient(true)
+
+        // Load project from localStorage if it exists
+        const storedProject = typeof window !== "undefined" ? localStorage.getItem("selectedProject") : null;
+        if (storedProject) {
+            dispatch(selectProject(JSON.parse(storedProject)))
+        }
+    }, [dispatch])
 
     const sidebarLinks = [
-    {
-        category: "MENU",
-        links: [
-            { id: 0, name: "Dashboard", href: "/dashboard", icon: HomeIcon },
-            { id: 1, name: "People", href: "/people", icon: UserCircle },
-            { id: 2, name: "Community", href: "/community", icon: Globe },
-            { id: 3, name: "My Goals", href: "/goals", icon: Goal },
-        ],
-    },
-    {
-        category: "SUPPORT",
-        links: [
-            { id: 1, name: "Settings", href: "/settings/profile", icon: Settings },
-        ],
-    },
-]
+        {
+            category: "MENU",
+            links: [
+                { id: 0, name: "Dashboard", href: `/admin/${project?.id}/dashboard`, icon: HomeIcon },
+                { id: 1, name: "People", href: `/admin/${project?.id}/people`, icon: UserCircle },
+            ],
+        },
+        {
+            category: "SUPPORT",
+            links: [
+                { id: 1, name: "Settings", href: "/settings/profile", icon: Settings },
+            ],
+        },
+    ]
+
+    if (!isClient) return null; // Ensure no rendering happens during SSR
+
     return (
-        <div className="hidden md:flex flex-col h-[calc(100vh-1.5rem)] w-[260px] bg-card border-2 rounded-lg">
-            <div className="flex items-center border-b h-16 gap-3 p-4">
-                <div className="flex p-1 items-center justify-center rounded-lg bg-teal-500">
-                    <Logo />
+        <div className="hidden md:flex flex-col h-screen w-[220px]  bg-background">
+            <div className="flex justify-between items-center h-16 p-2 rounded-2xl border-2 bg-card">
+                <div className='flex items-center gap-3'>
+                    {project && project.logo ? (
+                        <Image
+                            src={project.logo}
+                            alt={project.name || "Project"}
+                            width={50}
+                            height={50}
+                        />
+                    ) : null}
+
+                    <div>
+                        <h1 className='text-2xl'>{project?.name}</h1>
+                    </div>
                 </div>
-                <div>
-                    <h1 className="font-semibold">Studify</h1>
-                    <p className="text-sm text-zinc-400">Study Planner</p>
-                </div>
+                <FaAnglesLeft className='h-8 w-6 text-muted-foreground' />
             </div>
 
+            {/* <ModeToggle /> */}
             <div className="flex h-full flex-col justify-between p-2">
                 <div className="space-y-6 mt-4">
                     {sidebarLinks.map((section) => (
@@ -60,8 +83,8 @@ export function Sidebar({ userId }: userProps) {
                                         key={link.id}
                                         href={link.href}
                                         className={cn(
-                                            "flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white",
-                                            pathname.includes(link.href) && "bg-primary text-slate-950 hover:bg-primary/90 hover:text-slate-800"
+                                            "flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/60 hover:text-primary",
+                                            pathname.includes(link.href) && "bg-accent/80 text-primary/70 hover:bg-accent hover:text-primary"
                                         )}
                                     >
                                         <link.icon className="h-4 w-4" />
@@ -71,20 +94,6 @@ export function Sidebar({ userId }: userProps) {
                             </nav>
                         </div>
                     ))}
-                </div>
-
-                <div className="mx-2 rounded-lg bg-zinc-800/50 p-4 space-y-2">
-                    <div className="text-center">
-                        <h3 className="font-medium">Become Pro Access</h3>
-                        <p className="mt-1 text-sm text-zinc-400">Try your experience for using more features</p>
-                    </div>
-                    <Button className="mt-4 w-full bg-[#EEB58F] font-medium text-zinc-900 hover:bg-[#d7a07b]">
-                        <Crown className="mr-2 h-4 w-4" />
-                        Upgrade Pro
-                    </Button>
-                    {userId && (
-                        <SubmitButton text='Logout'/>
-                    )}
                 </div>
             </div>
         </div>

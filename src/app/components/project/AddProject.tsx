@@ -8,15 +8,26 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import Image from 'next/image'
 import { X } from 'lucide-react'
-import { UploadDropzone } from '../utils/uploadthing'
-import { SubmitButton } from './SubmitButton'
+import { UploadDropzone } from '../../utils/uploadthing'
+import { SubmitButton } from '../buttons/SubmitButton'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { addNewProject } from '../actions'
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { addNewProject } from '../../actions'
 
+const categories = ['Green', 'Black']
 export const AddProject = () => {
     const initialState = { message: "", status: undefined, errors: {} }
     const [state, formAction] = useActionState(addNewProject, initialState)
     const [logo, setLogo] = useState<string>('')
+    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
     useEffect(() => {
         console.log("State updated:", state)
@@ -69,6 +80,28 @@ export const AddProject = () => {
                             )}
                         </div>
                         <div className="space-y-2">
+                            <Label className="text-sm font-medium">Category</Label>
+                            <Input name="waitListCode" type="hidden" value={selectedCategory} required className="w-full" />
+                            <Select onValueChange={(value) => setSelectedCategory(value)}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Categories</SelectLabel>
+                                        {categories.map((category) => (
+                                            <SelectItem key={category} value={category}>
+                                                {category}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            {state.errors?.waitListCode && (
+                                <p className="text-destructive">{state.errors.waitListCode}</p>
+                            )}
+                        </div>
+                        <div className="space-y-2">
                             <input type="hidden" name="logo" value={logo} />
                             <div className='flex items-center justify-start gap-10'>
                                 <div>
@@ -109,7 +142,7 @@ export const AddProject = () => {
                         </div>
                         <DialogFooter>
                             <DialogClose asChild>
-                                <SubmitButton text="Add Car" />
+                                <SubmitButton text="Create Project" />
                             </DialogClose>
                         </DialogFooter>
                     </form>

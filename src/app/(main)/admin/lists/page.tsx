@@ -1,12 +1,6 @@
 
-
-import { Button } from "@/components/ui/button"
-import { Plus, MessageSquare, Settings, User } from 'lucide-react'
-import Link from "next/link"
-import { ProjectCard } from "@/app/components/ProjectCard"
-import { redirect } from "next/navigation"
-import { Logo } from "../../../../../public/logo"
-import { AddProject } from "@/app/components/AddProject"
+import { ProjectCard } from "@/app/components/project/ProjectCard"
+import { AddProject } from "@/app/components/project/AddProject"
 import { requireUser } from "@/app/utils/hooks"
 import prisma from "@/app/utils/db"
 
@@ -79,13 +73,7 @@ export default async function Dashboard() {
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
-              id={project.id}
-              name={project.name}
-              handle={project.handle}
-              description={project.description}
-              logo={project.logo}
-              totalSignUps={0}
-              last24h={0}
+              project={project}
             />
           ))}
         </div>

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth, signIn } from "../utils/auth";
 import { redirect } from "next/navigation";
-import { GitHubAuthButton, GoogleAuthButton, LinkedInAuthButton, SubmitButton } from "../components/SubmitButton";
+import { GitHubAuthButton, GoogleAuthButton, LinkedInAuthButton, SubmitButton } from "../components/buttons/SubmitButton";
 
 export default async function Login() {
   const session = await auth();

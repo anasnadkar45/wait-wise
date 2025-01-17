@@ -13,6 +13,9 @@ const config: Config = {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+			outerBackground: 'hsl(var(--outer-background))',
+			outerBackgroundCard: 'hsl(var(--outer-background-card))',
+			outerBackgroundBorder: 'hsl(var(--outer-background-border))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
