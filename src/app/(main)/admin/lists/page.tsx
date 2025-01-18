@@ -3,6 +3,7 @@ import { ProjectCard } from "@/app/components/project/ProjectCard"
 import { AddProject } from "@/app/components/project/AddProject"
 import { requireUser } from "@/app/utils/hooks"
 import prisma from "@/app/utils/db"
+import { Logo } from "../../../../../public/logo"
 
 const getProjects = async (userId: string) => {
   const data = await prisma.project.findMany({
@@ -19,48 +20,14 @@ export default async function Dashboard() {
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
-      {/* <nav className="flex w-[240px] m-4 flex-col bg-card border rounded-lg">
+      <nav className="flex w-[240px] m-4 flex-col bg-card border rounded-lg">
         <div className="flex h-14 items-center gap-2 px-4">
           <Logo />
           <span className="font-medium">Waitless</span>
         </div>
 
-        <div className="flex-1 space-y-1 p-2">
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-md px-2" asChild>
-            <Link href="/updates">Updates</Link>
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-md px-2" asChild>
-            <Link href="/support">
-              <MessageSquare size={16} />
-              Support
-            </Link>
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-md px-2" asChild>
-            <Link href="/settings">
-              <Settings size={16} />
-              Settings
-            </Link>
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-md px-2" asChild>
-            <Link href="/account">
-              <User size={16} />
-              Account
-            </Link>
-          </Button>
-        </div>
-
-        <div className="border-t p-4">
-          <div className="mb-2 text-xs font-medium text-muted-foreground">FREE PLAN</div>
-          <div className="mb-4 text-sm">
-            <span className="font-medium">1</span>
-            <span className="text-muted-foreground"> / 2,500 signups</span>
-          </div>
-          <Button size="sm" className="w-full" variant="outline">
-            Upgrade Plan
-          </Button>
-
-        </div>
-      </nav> */}
+        
+      </nav>
 
       {/* Main Content */}
       <main className="flex-1 border-l">

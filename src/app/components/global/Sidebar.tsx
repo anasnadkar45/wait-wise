@@ -52,20 +52,21 @@ export function Sidebar({ userId }: userProps) {
     if (!isClient) return null; // Ensure no rendering happens during SSR
 
     return (
-        <div className="hidden md:flex flex-col h-screen w-[220px]  bg-background">
+        <div className="hidden md:flex flex-col h-screen w-[220px]  bg-card/20 rounded-2xl p-2 border ">
             <div className="flex justify-between items-center h-16 p-2 rounded-2xl border-2 bg-card">
                 <div className='flex items-center gap-3'>
                     {project && project.logo ? (
                         <Image
                             src={project.logo}
                             alt={project.name || "Project"}
-                            width={50}
-                            height={50}
+                            width={40}
+                            height={40}
+                            className='rounded-md border-2 border-muted'
                         />
                     ) : null}
 
                     <div>
-                        <h1 className='text-2xl'>{project?.name}</h1>
+                        <h1 className='text-lg font-bold text-primary'>{project?.name}</h1>
                     </div>
                 </div>
                 <FaAnglesLeft className='h-8 w-6 text-muted-foreground' />
