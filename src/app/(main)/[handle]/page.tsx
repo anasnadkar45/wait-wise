@@ -4,14 +4,14 @@ import WaitingListBlack from "@/app/components/waitlist/WaitingListBlack";
 import WaitingListGreen from "@/app/components/waitlist/WaitingListGreen";
 
 // Function to fetch project data
-const getProject = async (handle: string) => {
+const getProjectData = async (handle: string) => {
   return await prisma.project.findUnique({
     where: { handle },
   });
 };
 
 const Page = async ({ params }: { params: { handle: string } }) => {
-  const project = await getProject(params.handle);
+  const project = await getProjectData(params.handle);
 
   if (!project) {
     return <div>Project not found</div>;

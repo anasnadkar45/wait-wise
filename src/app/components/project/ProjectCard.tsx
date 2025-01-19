@@ -1,21 +1,13 @@
-"use client"
-
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight, Users } from 'lucide-react'
-import { useDispatch } from "react-redux"
-import { selectProject } from "@/app/utils/store/features/project/projectSlice"
+import { projectType } from "@/app/utils/types"
 
-export function ProjectCard({ project }: { project: any }) {
-  const dispatch = useDispatch()
-
-  const handleClick = () => {
-    dispatch(selectProject(project))
-  }
+export function ProjectCard({ project }: { project: projectType }) {
 
   return (
-    <Link href={`/admin/${project.id}/dashboard`} onClick={handleClick}>
+    <Link href={`/admin/${project.id}/dashboard`}>
       <Card className="bg-gradient-to-br from-primary/5 to-card p-6 border-2 border-muted/60 overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
         <CardContent className="p-0">
           <div className="">

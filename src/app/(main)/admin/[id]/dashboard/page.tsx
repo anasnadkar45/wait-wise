@@ -1,51 +1,20 @@
-"use client"
-import { RootState } from '@/app/utils/store/store'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Clipboard } from 'lucide-react'
-import Link from 'next/link'
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { ShareCard } from "@/app/components/project/ShareCard";
+import prisma from "@/app/utils/db";
 
-const page = () => {
-  const project = useSelector((state: RootState) => state.project.selectedProject)
-  const [copied, setCopied] = useState(false)
+const getProjectData = async (id: string) => {
+  return await prisma.project.findUnique({
+    where: { id },
+  });
+};
 
-  const handleCopyClick = () => {
-    if (project?.handle) {
-      navigator.clipboard.writeText(`localhost:3000/${project.handle}`).then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)  // Reset copied state after 2 seconds
-      })
-    }
-  }
+const Dashboard = async ({ params }: { params: { id: string } }) => {
+  const projectData = await getProjectData(params.id);
+  
   return (
     <div className='text-black'>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Share
-          </CardTitle>
-          <CardDescription>
-            {project?.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Input defaultValue={`waitwise.com/${project?.handle}`} readOnly/>
-          <Button variant={'outline'} size={'icon'} onClick={handleCopyClick}>
-            <Clipboard />
-          </Button>
-          {copied && <span className="text-green-500">Copied!</span>}
-        </CardContent>
-        <CardFooter>
-          <Link href={`/${project?.handle}`} target="_blank" rel="noopener noreferrer">
-            <Button>Visit</Button>
-          </Link>
-        </CardFooter>
-      </Card>
+      <ShareCard project={projectData as any}/>
     </div>
   )
 }
 
-export default page
+export default Dashboard

@@ -6,10 +6,7 @@ import { usePathname } from 'next/navigation'
 import { HomeIcon, Settings, UserCircle } from 'lucide-react'
 import { FaAnglesLeft } from "react-icons/fa6";
 import { cn } from '@/lib/utils'
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '@/app/utils/store/store'
 import Image from 'next/image'
-import { selectProject } from '@/app/utils/store/features/project/projectSlice'
 import { ModeToggle } from '../theme/ModeToggle'
 
 interface userProps {
@@ -18,27 +15,13 @@ interface userProps {
 
 export function Sidebar({ userId }: userProps) {
     const pathname = usePathname()
-    const project = useSelector((state: RootState) => state.project.selectedProject)
-    const dispatch = useDispatch()
-    const [isClient, setIsClient] = useState(false)
-
-    useEffect(() => {
-        // Ensure this only runs on the client side
-        setIsClient(true)
-
-        // Load project from localStorage if it exists
-        const storedProject = typeof window !== "undefined" ? localStorage.getItem("selectedProject") : null;
-        if (storedProject) {
-            dispatch(selectProject(JSON.parse(storedProject)))
-        }
-    }, [dispatch])
-
+    const projectId = pathname.split('/')[2];
     const sidebarLinks = [
         {
             category: "MENU",
             links: [
-                { id: 0, name: "Dashboard", href: `/admin/${project?.id}/dashboard`, icon: HomeIcon },
-                { id: 1, name: "People", href: `/admin/${project?.id}/people`, icon: UserCircle },
+                { id: 0, name: "Dashboard", href: `/admin/${projectId}/dashboard`, icon: HomeIcon },
+                { id: 1, name: "People", href: `/admin/${projectId}/people`, icon: UserCircle },
             ],
         },
         {
@@ -49,11 +32,10 @@ export function Sidebar({ userId }: userProps) {
         },
     ]
 
-    if (!isClient) return null; // Ensure no rendering happens during SSR
 
     return (
         <div className="hidden md:flex flex-col h-screen w-[220px]  bg-card/20 rounded-2xl p-2 border ">
-            <div className="flex justify-between items-center h-16 p-2 rounded-2xl border-2 bg-card">
+            {/* <div className="flex justify-between items-center h-16 p-2 rounded-2xl border-2 bg-card">
                 <div className='flex items-center gap-3'>
                     {project && project.logo ? (
                         <Image
@@ -70,7 +52,7 @@ export function Sidebar({ userId }: userProps) {
                     </div>
                 </div>
                 <FaAnglesLeft className='h-8 w-6 text-muted-foreground' />
-            </div>
+            </div> */}
 
             {/* <ModeToggle /> */}
             <div className="flex h-full flex-col justify-between p-2">

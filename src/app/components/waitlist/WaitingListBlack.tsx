@@ -1,22 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Spotlight } from '@/components/ui/Spotlight'
 import { Geist, Geist_Mono } from "next/font/google";
+import { toast } from 'sonner'
+import { submitWaitList } from '@/app/actions'
+import { SubmitButton } from '../buttons/SubmitButton'
 
 export default function WaitingListBlack({ project }: any) {
-  const [email, setEmail] = useState('')
+  const initialState = { message: "", status: undefined, errors: {} }
+  const [state, formAction] = useActionState(submitWaitList, initialState)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Submitted email:', email)
-  }
+  useEffect(() => {
+    console.log("State updated:", state)
+    if (state.status === "success") {
+      toast.success(state.message)
+    } else if (state.status === "error") {
+      toast.error(state.message)
+    }
+  }, [state])
 
   return (
-    <div className="h-screen w-full rounded-md flex flex-col items-center justify-center bg-black/70 bg-[linear-gradient(to_right,#2a2a2a5a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a2a5a_1px,transparent_1px)] bg-[size:1rem_1rem] antialiased bg-grid-white/10 relative overflow-hidden">
+    <div className="h-screen w-full rounded-md flex flex-col items-center justify-center bg-black/70 bg-[linear-gradient(to_right,#1f1f1f44_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f44_1px,transparent_1px)] bg-[size:1rem_1rem] antialiased bg-grid-white/10 relative overflow-hidden">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
         fill="white"
@@ -63,26 +71,22 @@ export default function WaitingListBlack({ project }: any) {
 
         {/* Form */}
         <motion.form
-          onSubmit={handleSubmit}
-          className="flex gap-4 max-w-xl mx-auto mb-12"
+          action={formAction}
+          className="flex gap-4 max-w-3xl mx-auto mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
+          <input type='hidden' name='projectId' value={project.id}/>
           <Input
             type="email"
+            id='email'
+            name='email'
             placeholder="name@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 h-12 bg-[#2A2A2A] border-none text-white placeholder:text-gray-500"
+            className="flex-1 h-12 w-[600px] bg-[#2A2A2A] border-none text-white placeholder:text-gray-500"
             required
           />
-          <Button
-            type="submit"
-            className="h-12 px-8 bg-[#40ff93] hover:bg-[#40ff83] text-muted"
-          >
-            Join Waitlist
-          </Button>
+          <SubmitButton text='Join Waitlist'/>
         </motion.form>
 
         {/* Join Count */}

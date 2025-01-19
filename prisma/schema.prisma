@@ -85,17 +85,26 @@ model Authenticator {
 }
 
 model Project {
-  id           String       @id @unique @default(cuid())
-  name         String
-  description  String
-  handle       String       @unique
-  logo         String
-  waitListCode CategoryType @default(Green)
-  User         User?        @relation(fields: [userId], references: [id])
-  userId       String?
+  id                 String        @id @unique @default(cuid())
+  name               String
+  description        String
+  handle             String        @unique
+  logo               String
+  waitListCode       CategoryType  @default(Green)
+  waitListSubmission Submissions[]
+  User               User?         @relation(fields: [userId], references: [id])
+  userId             String?
 }
 
 enum CategoryType {
   Green
   Black
+}
+
+model Submissions {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
 }
