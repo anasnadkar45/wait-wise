@@ -1,6 +1,7 @@
 import { CategoryType } from "@prisma/client";
 
 export interface ProjectType {
+    totalSubmissions: number;
     id: string;
     name: string;
     handle: string;

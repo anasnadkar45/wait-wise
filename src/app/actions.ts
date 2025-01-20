@@ -137,9 +137,9 @@ export async function submitWaitList(prevState: any, formData: FormData) {
         const emailExists = await prisma.project.findUnique({
             where: {
                 id: projectId,
-                waitListSubmission:{
-                    some:{
-                        email:validateFields.data.email
+                waitListSubmission: {
+                    some: {
+                        email: validateFields.data.email
                     }
                 }
             },
@@ -184,3 +184,25 @@ export async function submitWaitList(prevState: any, formData: FormData) {
 }
 
 // ----------------------------------------------------------------
+export async function getProjectData(id: string, skip: number) {
+    const project = await prisma.project.findUnique({
+        where: { id },
+        include: {
+            waitListSubmission: {
+                take: 12,
+                skip: skip,
+                orderBy: {
+                    createdAt: "desc",
+                },
+            },
+            _count: {
+                select: { waitListSubmission: true },
+            },
+        },
+    })
+
+    return {
+        ...project,
+        totalSubmissions: project?._count.waitListSubmission,
+    }
+}

@@ -8,7 +8,7 @@ export function ProjectOverview({ project }: { project: ProjectType }) {
       <CardHeader>
         <CardTitle>Project Overview</CardTitle>
       </CardHeader>
-      <CardContent className="flex items-center space-x-4">
+      <CardContent className="flex flex-col space-y-4">
         <Image
           src={project.logo || "/placeholder.svg"}
           alt={project.name}
@@ -19,7 +19,7 @@ export function ProjectOverview({ project }: { project: ProjectType }) {
         <div>
           <h2 className="text-2xl font-bold">{project.name}</h2>
           <p className="text-muted-foreground">@{project.handle}</p>
-          <p className="mt-2">{project.description}</p>
+          <p className="mt-2 line-clamp-1">{project.description}</p>
         </div>
       </CardContent>
     </Card>

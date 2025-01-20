@@ -1,4 +1,4 @@
-import { ShareCard } from "@/app/components/project/ShareCard"
+import { ShareCard } from "@/app/components/dashboard/ShareCard"
 import { Users, TrendingUp, Clock } from "lucide-react"
 import prisma from "@/app/utils/db"
 import { ProjectOverview } from "@/app/components/dashboard/ProjectOverview"
@@ -56,19 +56,22 @@ const Dashboard = async ({ params }: { params: { id: string } }) => {
   })
   return (
     <div className="space-y-4 ">
-      <ProjectOverview project={projectData as any} />
-
+      <div>
+        
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <ProjectOverview project={projectData as any} />
+        <ShareCard project={projectData as any} />
+      </div>
       <div className="grid gap-4 md:grid-cols-3">
         <StatCard title="Total Signups" value={totalSignups} icon={Users} />
         <StatCard title="Last 24 Hours" value={last24HrSignUps} icon={TrendingUp} />
         <StatCard title="Average Daily" value={Math.round(totalSignups / 30)} icon={Clock} />
       </div>
 
-      <SignupChart data={signupData} />
-
       <div className="grid gap-4 md:grid-cols-2">
+        <SignupChart data={signupData} />
         <RecentSubmissions project={projectData as any} />
-        <ShareCard project={projectData as any} />
       </div>
     </div>
   )

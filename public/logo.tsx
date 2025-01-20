@@ -6,7 +6,7 @@ export function Logo() {
         viewBox="0 0 48 48" 
         width="24" 
         xmlns="http://www.w3.org/2000/svg"
-        className="text-primary"
+        className="text-black dark:text-primary"
       >
         <g fill="currentColor">
           <path d="m45.7999 21.2369c-2.0788 2.0788-5.4491 2.0788-7.5279 0-2.0788-2.0787-2.0788-5.4491 0-7.5279s5.4491-2.0788 7.5279 0 2.0788 5.4492 0 7.5279z" opacity=".4"/>

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Separator } from '@/components/ui/separator'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/utils/redux/store'
+import { ModeToggle } from '../theme/ModeToggle'
 
 interface userProps {
     userId: string
@@ -25,39 +26,37 @@ export function Sidebar({ userId, activeProjectId }: userProps) {
         {
             category: "MENU",
             links: [
-                { id: 0, name: "Dashboard", href: `/admin/${projectId}/dashboard`, icon: HomeIcon },
-                { id: 1, name: "People", href: `/admin/${projectId}/people`, icon: UserCircle },
+                { id: 0, name: "Dashboard", href: `/admin/${projectId}/dashboard`, icon: <HomeIcon /> },
+                { id: 1, name: "People", href: `/admin/${projectId}/people`, icon: <UserCircle /> },
             ],
         },
         {
             category: "SUPPORT",
             links: [
-                { id: 1, name: "Settings", href: "/settings/profile", icon: Settings },
+                { id: 1, name: "Settings", href: "/settings/profile", icon: <Settings /> },
             ],
         },
     ]
 
     const onChangeActiveWorkspace = (value: string) => {
         router.push(`/admin/${value}/dashboard`)
-      }
-    //   const currentWorkspace = projects.find(
-    //     (s) => s.id === 
-    //   )
+    }
 
     return (
         <div className="bg-card flex-none relative p-4 h-full w-[250px] rounded-xl border-2 flex flex-col gap-4 items-start overflow-hidden">
-            <div  className="bg-[#101010] p-4 flex gap-2 justify-center items-center border-b mb-4 absolute top-0 left-0 right-0 ">
+            <div className="bg-background p-4 flex gap-2 justify-center items-center border-b mb-4 absolute top-0 left-0 right-0 ">
                 <Logo />
                 <p className="text-2xl font-bold">WaitWise</p>
+                <ModeToggle />
             </div>
             <Select
                 defaultValue={activeProjectId}
                 onValueChange={onChangeActiveWorkspace}
             >
-                <SelectTrigger className="mt-16 text-neutral-400 bg-transparent">
+                <SelectTrigger className="mt-16">
                     <SelectValue placeholder="Select a workspace"></SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-[#111111] backdrop-blur-xl">
+                <SelectContent className="backdrop-blur-xl">
                     <SelectGroup>
                         <SelectLabel>Workspaces</SelectLabel>
                         <Separator />
@@ -76,19 +75,19 @@ export function Sidebar({ userId, activeProjectId }: userProps) {
                 <div className="space-y-6 mt-4">
                     {sidebarLinks.map((section) => (
                         <div key={section.category} className="space-y-1">
-                            <h2 className="text-xs font-bold text-zinc-500">{section.category}</h2>
+                            <h2 className="text-xs font-bold text-muted-foreground">{section.category}</h2>
                             <nav className="px-1 space-y-1">
                                 {section.links.map((link) => (
                                     <Link
                                         key={link.id}
                                         href={link.href}
                                         className={cn(
-                                            'flex items-center justify-between group rounded-lg hover:bg-[#1D1D1D]',
-                                            pathname.includes(link.href) ? 'bg-[#1D1D1D]' : ''
+                                            'flex items-center justify-between group rounded-lg hover:bg-muted',
+                                            pathname.includes(link.href) ? 'bg-muted' : ''
                                         )}
                                     >
                                         <div className="flex items-center gap-2 transition-all p-[5px] cursor-pointer">
-                                            {/* {link?.icon} */}
+                                            {link.icon}
                                             <span
                                                 className={cn(
                                                     'font-medium group-hover:text-[#9D9D9D] transition-all truncate w-32',
@@ -98,7 +97,6 @@ export function Sidebar({ userId, activeProjectId }: userProps) {
                                                 {link.name}
                                             </span>
                                         </div>
-                                        { }
                                     </Link>
                                 ))}
                             </nav>
