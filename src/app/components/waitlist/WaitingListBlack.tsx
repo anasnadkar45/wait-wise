@@ -9,6 +9,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { toast } from 'sonner'
 import { submitWaitList } from '@/app/actions'
 import { SubmitButton } from '../buttons/SubmitButton'
+import { SubmissionForm } from './SubmissionForm'
 
 export default function WaitingListBlack({ project }: any) {
   const initialState = { message: "", status: undefined, errors: {} }
@@ -70,24 +71,7 @@ export default function WaitingListBlack({ project }: any) {
         </motion.p>
 
         {/* Form */}
-        <motion.form
-          action={formAction}
-          className="flex gap-4 max-w-3xl mx-auto mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <input type='hidden' name='projectId' value={project.id}/>
-          <Input
-            type="email"
-            id='email'
-            name='email'
-            placeholder="name@email.com"
-            className="flex-1 h-12 w-[600px] bg-[#2A2A2A] border-none text-white placeholder:text-gray-500"
-            required
-          />
-          <SubmitButton text='Join Waitlist'/>
-        </motion.form>
+        <SubmissionForm project={project} />
 
         {/* Join Count */}
         <motion.div

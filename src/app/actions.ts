@@ -134,16 +134,21 @@ export async function submitWaitList(prevState: any, formData: FormData) {
 
     const projectId = formData.get('projectId') as string;
     try {
-        const emailExists = await prisma.submissions.findUnique({
+        const emailExists = await prisma.project.findUnique({
             where: {
-                email: validateFields.data.email,
+                id: projectId,
+                waitListSubmission:{
+                    some:{
+                        email:validateFields.data.email
+                    }
+                }
             },
         });
 
         if (emailExists) {
             return {
                 status: "error",
-                message: "This email is already on the waitlist."
+                message: "You have already joined the waitlist."
             };
         }
 

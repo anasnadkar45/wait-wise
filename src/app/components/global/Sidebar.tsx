@@ -1,21 +1,26 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { HomeIcon, Settings, UserCircle } from 'lucide-react'
-import { FaAnglesLeft } from "react-icons/fa6";
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import { ModeToggle } from '../theme/ModeToggle'
+import { Logo } from '../../../../public/logo'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/utils/redux/store'
 
 interface userProps {
     userId: string
+    activeProjectId: string
 }
 
-export function Sidebar({ userId }: userProps) {
+export function Sidebar({ userId, activeProjectId }: userProps) {
+    const router = useRouter()
     const pathname = usePathname()
-    const projectId = pathname.split('/')[2];
+    const projectId = activeProjectId
+    const projects = useSelector((state: RootState) => state.ProjectsReducer.projects);
+    console.log(projects)
     const sidebarLinks = [
         {
             category: "MENU",
@@ -32,46 +37,68 @@ export function Sidebar({ userId }: userProps) {
         },
     ]
 
+    const onChangeActiveWorkspace = (value: string) => {
+        router.push(`/admin/${value}/dashboard`)
+      }
+    //   const currentWorkspace = projects.find(
+    //     (s) => s.id === 
+    //   )
 
     return (
-        <div className="hidden md:flex flex-col h-screen w-[220px]  bg-card/20 rounded-2xl p-2 border ">
-            {/* <div className="flex justify-between items-center h-16 p-2 rounded-2xl border-2 bg-card">
-                <div className='flex items-center gap-3'>
-                    {project && project.logo ? (
-                        <Image
-                            src={project.logo}
-                            alt={project.name || "Project"}
-                            width={40}
-                            height={40}
-                            className='rounded-md border-2 border-muted'
-                        />
-                    ) : null}
-
-                    <div>
-                        <h1 className='text-lg font-bold text-primary'>{project?.name}</h1>
-                    </div>
-                </div>
-                <FaAnglesLeft className='h-8 w-6 text-muted-foreground' />
-            </div> */}
-
-            {/* <ModeToggle /> */}
+        <div className="bg-card flex-none relative p-4 h-full w-[250px] rounded-xl border-2 flex flex-col gap-4 items-start overflow-hidden">
+            <div  className="bg-[#101010] p-4 flex gap-2 justify-center items-center border-b mb-4 absolute top-0 left-0 right-0 ">
+                <Logo />
+                <p className="text-2xl font-bold">WaitWise</p>
+            </div>
+            <Select
+                defaultValue={activeProjectId}
+                onValueChange={onChangeActiveWorkspace}
+            >
+                <SelectTrigger className="mt-16 text-neutral-400 bg-transparent">
+                    <SelectValue placeholder="Select a workspace"></SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-[#111111] backdrop-blur-xl">
+                    <SelectGroup>
+                        <SelectLabel>Workspaces</SelectLabel>
+                        <Separator />
+                        {projects.map((workspace) => (
+                            <SelectItem
+                                value={workspace.id}
+                                key={workspace.id}
+                            >
+                                {workspace.name}
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
             <div className="flex h-full flex-col justify-between p-2">
                 <div className="space-y-6 mt-4">
                     {sidebarLinks.map((section) => (
                         <div key={section.category} className="space-y-1">
-                            <h2 className="px-4 text-xs font-bold text-zinc-500">{section.category}</h2>
-                            <nav className="space-y-1">
+                            <h2 className="text-xs font-bold text-zinc-500">{section.category}</h2>
+                            <nav className="px-1 space-y-1">
                                 {section.links.map((link) => (
                                     <Link
                                         key={link.id}
                                         href={link.href}
                                         className={cn(
-                                            "flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/60 hover:text-primary",
-                                            pathname.includes(link.href) && "bg-accent/80 text-primary/70 hover:bg-accent hover:text-primary"
+                                            'flex items-center justify-between group rounded-lg hover:bg-[#1D1D1D]',
+                                            pathname.includes(link.href) ? 'bg-[#1D1D1D]' : ''
                                         )}
                                     >
-                                        <link.icon className="h-4 w-4" />
-                                        {link.name}
+                                        <div className="flex items-center gap-2 transition-all p-[5px] cursor-pointer">
+                                            {/* {link?.icon} */}
+                                            <span
+                                                className={cn(
+                                                    'font-medium group-hover:text-[#9D9D9D] transition-all truncate w-32',
+                                                    pathname.includes(link.href) ? 'text-[#9D9D9D]' : 'text-[#545454]'
+                                                )}
+                                            >
+                                                {link.name}
+                                            </span>
+                                        </div>
+                                        { }
                                     </Link>
                                 ))}
                             </nav>

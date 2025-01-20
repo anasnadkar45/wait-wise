@@ -6,6 +6,7 @@ import { ourFileRouter } from "./api/uploadthing/core";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "./components/theme/theme-provider";
+import { StoreProvider } from "./StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,8 +42,10 @@ export default function RootLayout({
           <NextSSRPlugin
             routerConfig={extractRouterConfig(ourFileRouter)}
           />
-          {children}
-          <Toaster />
+          <StoreProvider>
+            {children}
+            <Toaster />
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,38 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { ProjectType } from '@/app/utils/types'
+import { SubmissionForm } from './SubmissionForm'
 
-export default function WaitingListGreen({project}:any) {
-  const [email, setEmail] = useState('')
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Submitted email:', email)
-  }
-
-  // Animation variants for the wave text
-  const waveVariants = {
-    animate: {
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  }
-
-  const textVariants = {
-    initial: { y: 20, opacity: 0 },
-    animate: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  }
+export default function WaitingListGreen({ project }: { project: ProjectType }) {
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center bg-[#d7ffd7] text-green-800 relative overflow-hidden">
@@ -75,28 +47,7 @@ export default function WaitingListGreen({project}:any) {
         </motion.p>
 
         {/* Form */}
-        <motion.form
-          onSubmit={handleSubmit}
-          className="flex gap-4 max-w-xl mx-auto mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Input
-            type="email"
-            placeholder="name@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 h-12 bg-white/50 backdrop-blur-sm border-green-200 text-green-900 placeholder:text-green-600/50 focus:border-green-500 focus:ring-green-500"
-            required
-          />
-          <Button
-            type="submit"
-            className="h-12 px-8 bg-green-600 hover:bg-green-700 text-white"
-          >
-            Subscribe
-          </Button>
-        </motion.form>
+        <SubmissionForm project={project} />
 
         {/* Join Count */}
         <motion.div

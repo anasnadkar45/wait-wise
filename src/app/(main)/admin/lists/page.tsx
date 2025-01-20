@@ -4,22 +4,23 @@ import { AddProject } from "@/app/components/project/AddProject"
 import { requireUser } from "@/app/utils/hooks"
 import prisma from "@/app/utils/db"
 import { Logo } from "../../../../../public/logo"
+import ProjectListClient from "@/app/components/project/ProjectListClient"
 
 const getProjects = async (userId: string) => {
   const data = await prisma.project.findMany({
     where: {
       userId: userId,
     },
-    select:{
-      id:true,
-      description:true,
-      handle:true,
-      logo:true,
-      name:true,
-      User:true,
-      userId:true,
-      waitListCode:true,
-      waitListSubmission:true,
+    select: {
+      id: true,
+      description: true,
+      handle: true,
+      logo: true,
+      name: true,
+      User: true,
+      userId: true,
+      waitListCode: true,
+      waitListSubmission: true,
     }
   })
 
@@ -28,7 +29,6 @@ const getProjects = async (userId: string) => {
 export default async function ProjectList() {
   const session = await requireUser()
   const projects = await getProjects(session.user?.id as string)
-  console.log(projects)
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
@@ -38,7 +38,7 @@ export default async function ProjectList() {
           <span className="font-medium">Waitless</span>
         </div>
 
-        
+
       </nav>
 
       {/* Main Content */}
@@ -48,14 +48,7 @@ export default async function ProjectList() {
           <AddProject />
         </header>
 
-        <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-3">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project as any}
-            />
-          ))}
-        </div>
+        <ProjectListClient projects={projects} />
       </main>
     </div>
   )

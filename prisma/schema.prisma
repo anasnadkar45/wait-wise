@@ -104,7 +104,7 @@ enum CategoryType {
 model Submissions {
   id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
-  email     String   @unique
+  email     String   
   Project   Project? @relation(fields: [projectId], references: [id])
   projectId String?
 }
