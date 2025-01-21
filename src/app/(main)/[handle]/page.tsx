@@ -8,6 +8,9 @@ import { WaitingListDarkBlue } from "@/app/components/waitlist/WaitingListDarkBl
 const getProjectData = async (handle: string) => {
   return await prisma.project.findUnique({
     where: { handle },
+    include:{
+      waitListSubmission: true,
+    }
   });
 };
 

@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/utils/redux/store'
 import { ModeToggle } from '../theme/ModeToggle'
+import { AddProject } from '../project/AddProject'
 
 interface userProps {
     userId: string
@@ -33,7 +34,7 @@ export function Sidebar({ userId, activeProjectId }: userProps) {
         {
             category: "SUPPORT",
             links: [
-                { id: 1, name: "Settings", href: "/settings/profile", icon: <Settings /> },
+                { id: 1, name: "Settings", href: `/admin/${projectId}/settings`, icon: <Settings /> },
             ],
         },
     ]
@@ -44,11 +45,11 @@ export function Sidebar({ userId, activeProjectId }: userProps) {
 
     return (
         <div className="bg-card flex-none relative p-4 h-full w-[250px] rounded-xl border-2 flex flex-col gap-4 items-start overflow-hidden">
-            <div className="bg-background p-4 flex gap-2 justify-center items-center border-b mb-4 absolute top-0 left-0 right-0 ">
+            <Link href={'/admin/lists'} className="bg-background p-4 flex gap-2 justify-center items-center border-b mb-4 absolute top-0 left-0 right-0 ">
                 <Logo />
                 <p className="text-2xl font-bold">WaitWise</p>
                 <ModeToggle />
-            </div>
+            </Link>
             <Select
                 defaultValue={activeProjectId}
                 onValueChange={onChangeActiveWorkspace}
@@ -56,12 +57,13 @@ export function Sidebar({ userId, activeProjectId }: userProps) {
                 <SelectTrigger className="mt-16">
                     <SelectValue placeholder="Select a workspace"></SelectValue>
                 </SelectTrigger>
-                <SelectContent className="backdrop-blur-xl">
-                    <SelectGroup>
+                <SelectContent className="backdrop-blur-xl bg-background">
+                    <SelectGroup >
                         <SelectLabel>Workspaces</SelectLabel>
                         <Separator />
                         {projects.map((workspace) => (
                             <SelectItem
+                            className='focus:bg-muted'
                                 value={workspace.id}
                                 key={workspace.id}
                             >

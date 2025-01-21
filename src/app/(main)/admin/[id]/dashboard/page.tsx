@@ -14,7 +14,7 @@ export const getProjectData = async (id: string) => {
         orderBy: {
           createdAt: "desc",
         },
-        take: 5,
+        take: 10,
       },
       _count: {
         select: { waitListSubmission: true },

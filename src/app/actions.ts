@@ -2,7 +2,6 @@
 import { requireUser } from "./utils/hooks";
 import prisma from "./utils/db";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { CategoryType } from "@prisma/client";
 
@@ -104,21 +103,101 @@ export async function addNewProject(prevState: any, formData: FormData) {
     }
 }
 
-const submissionSchema = z.object({
-    email: z
-        .string()
-});
+// ----------------------------------------------------------------
 
-export async function submitWaitList(prevState: any, formData: FormData) {
+export async function updateProject(prevState: any, formData: FormData) {
     const session = await requireUser();
     const user = session.user;
 
     if (!user?.id) {
         return {
             status: "error",
-            message: "User not found. Please log in to submit the waitlist."
+            message: "User not found. Please log in to add a new project."
         };
     }
+
+    const validateFields = projectSchema.safeParse({
+        name: formData.get('name'),
+        description: formData.get('description'),
+        handle: formData.get('handle'),
+        waitListCode: formData.get('waitListCode'),
+        logo: formData.get('logo'),
+    });
+
+    if (!validateFields.success) {
+        return {
+            status: "error",
+            message: "Validation failed.",
+            errors: validateFields.error.flatten().fieldErrors,
+        };
+    }
+
+    const projectId = formData.get('projectId') as string;
+
+    try {
+        const existingHandle = await prisma.project.findUnique({
+            where: { handle: validateFields.data.handle },
+        });
+
+        if (existingHandle) {
+            return {
+                status: "error",
+                message: "The handle is already in use. Please choose a unique handle."
+            };
+        }
+
+        const project = await prisma.project.update({
+            where: {
+                id:projectId
+            },
+            data: {
+                name: validateFields.data.name,
+                description: validateFields.data.description,
+                handle: validateFields.data.handle,
+                waitListCode: validateFields.data.waitListCode as CategoryType,
+                logo: validateFields.data.logo,
+                userId: user.id
+            }
+        });
+
+        revalidatePath(`/admin/lists`);
+
+        if (project) {
+            return {
+                status: "success",
+                message: "Your project has been updated successfully."
+            };
+        }
+        const state: State = {
+            status: "success",
+            message: "Your Project has been updated successfully",
+        };
+        return state;
+    } catch (err) {
+        return {
+            status: "error",
+            message: "An error occurred while creating the project. Please try again later."
+        };
+    }
+}
+
+// ----------------------------------------------------------------
+
+const submissionSchema = z.object({
+    email: z
+        .string()
+});
+
+export async function submitWaitList(prevState: any, formData: FormData) {
+    // const session = await requireUser();
+    // const user = session.user;
+
+    // if (!user?.id) {
+    //     return {
+    //         status: "error",
+    //         message: "User not found. Please log in to submit the waitlist."
+    //     };
+    // }
 
     const validateFields = submissionSchema.safeParse({
         email: formData.get("email")

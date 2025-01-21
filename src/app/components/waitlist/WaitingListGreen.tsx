@@ -51,23 +51,15 @@ export default function WaitingListGreen({ project }: { project: ProjectType }) 
 
         {/* Join Count */}
         <motion.div
-          className="flex items-center justify-center gap-3 text-green-700"
+          className="flex items-center justify-center gap-3 text-gray-400"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <span>Over 200+ have already joined</span>
           <div className="flex -space-x-2">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-6 h-6 rounded-full bg-green-200 border-2 border-[#f2f9f2]"
-              />
-            ))}
+            <h1>Join now to secure your #{project.waitListSubmission.length + 1} place.</h1>
           </div>
         </motion.div>
-
-
       </main>
 
     </div>

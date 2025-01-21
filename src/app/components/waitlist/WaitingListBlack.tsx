@@ -2,16 +2,13 @@
 
 import { useActionState, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Spotlight } from '@/components/ui/Spotlight'
-import { Geist, Geist_Mono } from "next/font/google";
 import { toast } from 'sonner'
 import { submitWaitList } from '@/app/actions'
-import { SubmitButton } from '../buttons/SubmitButton'
 import { SubmissionForm } from './SubmissionForm'
+import { ProjectType } from '@/app/utils/types'
 
-export default function WaitingListBlack({ project }: any) {
+export default function WaitingListBlack({ project }: {project: ProjectType}) {
   const initialState = { message: "", status: undefined, errors: {} }
   const [state, formAction] = useActionState(submitWaitList, initialState)
 
@@ -24,8 +21,10 @@ export default function WaitingListBlack({ project }: any) {
     }
   }, [state])
 
+  console.log(project.waitListSubmission)
+
   return (
-    <div className="h-screen w-full rounded-md flex flex-col items-center justify-center bg-black/70 bg-[linear-gradient(to_right,#1f1f1f44_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f44_1px,transparent_1px)] bg-[size:1rem_1rem] antialiased bg-grid-white/10 relative overflow-hidden">
+    <div className="h-screen w-full rounded-md flex flex-col items-center justify-center bg-[#030303] text-white bg-[linear-gradient(to_right,#1f1f1f44_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f44_1px,transparent_1px)] bg-[size:1rem_1rem] antialiased bg-grid-white/10 relative overflow-hidden">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
         fill="white"
@@ -46,7 +45,8 @@ export default function WaitingListBlack({ project }: any) {
 
         {/* Header */}
         <header className="flex justify-center items-center p-6">
-          <h1 className="text-2xl font-bold">{project.name}</h1>
+          <motion.h1 initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }} className="text-2xl font-bold">{project.name}</motion.h1>
         </header>
 
         {/* Heading */}
@@ -80,17 +80,10 @@ export default function WaitingListBlack({ project }: any) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <span>Over 200+ have already joined</span>
           <div className="flex -space-x-2">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-6 h-6 rounded-full bg-gray-600 border-2 border-[#1C1C1C]"
-              />
-            ))}
+            <h1>Join now to secure your #{project.waitListSubmission.length + 1} place.</h1>
           </div>
         </motion.div>
-
       </main>
     </div>
   )

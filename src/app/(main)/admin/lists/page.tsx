@@ -1,10 +1,13 @@
-
-import { ProjectCard } from "@/app/components/project/ProjectCard"
-import { AddProject } from "@/app/components/project/AddProject"
+import { Suspense } from "react"
 import { requireUser } from "@/app/utils/hooks"
 import prisma from "@/app/utils/db"
-import { Logo } from "../../../../../public/logo"
+import { AddProject } from "@/app/components/project/AddProject"
 import ProjectListClient from "@/app/components/project/ProjectListClient"
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react"
+import Link from "next/link"
+import { signOut } from "@/app/utils/auth"
+import { SubmitButton } from "@/app/components/buttons/SubmitButton"
 
 const getProjects = async (userId: string) => {
   const data = await prisma.project.findMany({
@@ -21,38 +24,37 @@ const getProjects = async (userId: string) => {
       userId: true,
       waitListCode: true,
       waitListSubmission: true,
-    }
+    },
   })
 
   return data
 }
+
 export default async function ProjectList() {
   const session = await requireUser()
   const projects = await getProjects(session.user?.id as string)
+
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar */}
-      <nav className="flex w-[240px] m-4 flex-col bg-card border rounded-lg">
-        <div className="flex h-14 items-center gap-2 px-4">
-          <Logo />
-          <span className="font-medium">Waitless</span>
-        </div>
-
-
-      </nav>
-
-      {/* Main Content */}
-      <main className="flex-1 border-l">
-        <header className="flex h-14 items-center justify-between border-b px-4">
-          <h1 className="text-lg font-medium">Your projects</h1>
+    <div className="min-h-screen p-6">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Your Projects</h1>
+        <div className="flex items-center gap-4">
           <AddProject />
-        </header>
+          <form
+            action={async () => {
+              "use server"
+              await signOut()
+            }}
+          >
+            <SubmitButton text="Logout" variant={"outline"} className="hover:bg-muted"/>
+          </form>
+        </div>
+      </header>
 
+      <Suspense fallback={<div>Loading projects...</div>}>
         <ProjectListClient projects={projects} />
-      </main>
+      </Suspense>
     </div>
   )
 }
-
-
 
