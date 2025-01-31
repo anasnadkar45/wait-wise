@@ -32,7 +32,7 @@ export default async function Login() {
                 <GoogleAuthButton  />
               </form>
 
-              <form
+              {/* <form
                 className="w-full"
                 action={async () => {
                   "use server"
@@ -50,7 +50,7 @@ export default async function Login() {
                 }}
               >
                 <LinkedInAuthButton  />
-              </form>
+              </form> */}
             </div>
 
             <div className="mt-6 text-center text-sm text-gray-400">
