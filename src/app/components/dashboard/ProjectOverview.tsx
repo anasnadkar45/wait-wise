@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { ProjectType } from "@/app/utils/types"
 import Image from "next/image"
+import ReactMarkdown from "react-markdown"
 
 export function ProjectOverview({ project }: { project: ProjectType }) {
   return (
@@ -19,7 +20,7 @@ export function ProjectOverview({ project }: { project: ProjectType }) {
         <div>
           <h2 className="text-2xl font-bold">{project.name}</h2>
           <p className="text-muted-foreground">@{project.handle}</p>
-          <p className="mt-2 line-clamp-1">{project.description}</p>
+          <ReactMarkdown>{project.description}</ReactMarkdown>
         </div>
       </CardContent>
     </Card>

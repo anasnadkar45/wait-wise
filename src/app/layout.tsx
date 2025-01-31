@@ -9,6 +9,7 @@ import { ThemeProvider } from "./components/theme/theme-provider";
 import { StoreProvider } from "./StoreProvider";
 import { Titillium_Web, Amaranth } from "next/font/google";
 import { cn } from "@/lib/utils";
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
 
 const titillium_Web = Titillium_Web({ weight: "400", subsets: ["latin"] });
 export const amaranth = Amaranth({ weight: "400", subsets: ["latin"] });
+export const dynamic = 'force-dynamic';
 
 export default function RootLayout({
   children,
@@ -47,6 +49,7 @@ export default function RootLayout({
           <NextSSRPlugin
             routerConfig={extractRouterConfig(ourFileRouter)}
           />
+          <NextTopLoader />
           <StoreProvider>
             {children}
             <Toaster />

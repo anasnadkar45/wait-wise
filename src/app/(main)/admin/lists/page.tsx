@@ -3,9 +3,6 @@ import { requireUser } from "@/app/utils/hooks"
 import prisma from "@/app/utils/db"
 import { AddProject } from "@/app/components/project/AddProject"
 import ProjectListClient from "@/app/components/project/ProjectListClient"
-import { Button } from "@/components/ui/button"
-import { LogOut } from "lucide-react"
-import Link from "next/link"
 import { signOut } from "@/app/utils/auth"
 import { SubmitButton } from "@/app/components/buttons/SubmitButton"
 
@@ -46,7 +43,7 @@ export default async function ProjectList() {
               await signOut()
             }}
           >
-            <SubmitButton text="Logout" variant={"outline"} className="hover:bg-muted"/>
+            <SubmitButton text="Logout" variant={"outline"} className="hover:bg-muted" />
           </form>
         </div>
       </header>

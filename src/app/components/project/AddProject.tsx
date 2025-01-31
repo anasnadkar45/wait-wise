@@ -14,6 +14,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { addNewProject } from '../../actions'
 import { cn } from '@/lib/utils'
 import { Logo } from '../../../../public/logo'
+import { ProjectDescriptionGenerator } from './ProjectDescriptionGenerator'
 
 export const themes = [
     {
@@ -32,6 +33,11 @@ export const AddProject = () => {
     const [state, formAction] = useActionState(addNewProject, initialState)
     const [logo, setLogo] = useState<string>('')
     const [selectedTheme, setSelectedTheme] = useState(themes[0]);
+    const [description, setDescription] = useState("")
+
+    const handleDescriptionGenerated = (generatedDescription: string) => {
+        setDescription(generatedDescription)
+    }
 
     useEffect(() => {
         console.log("State updated:", state)
@@ -68,11 +74,12 @@ export const AddProject = () => {
                                     <p className="text-destructive">{state.errors.name}</p>
                                 )}
                             </div>
+                            <ProjectDescriptionGenerator onDescriptionGenerated={handleDescriptionGenerated} />
                             <div className="space-y-2">
                                 <Label htmlFor="description" className="text-left text-sm font-medium">
                                     Description
                                 </Label>
-                                <Textarea placeholder="e.g. High-speed internet access from space" name="description" className="w-full min-h-[100px]" />
+                                <Textarea placeholder="e.g. High-speed internet access from space" name="description" value={description} className="w-full min-h-[100px]" />
                                 {state.errors?.description && (
                                     <p className="text-destructive">{state.errors.description}</p>
                                 )}
@@ -90,7 +97,7 @@ export const AddProject = () => {
                                 <div className='grid grid-cols-3 gap-2'>
                                     {themes.map((theme, id) => (
                                         <Button
-                                            key={ id}
+                                            key={id}
                                             type='button'
                                             className={cn(
                                                 "flex flex-col gap-2 rounded-lg border-2 p-4 h-32 text-left hover:border-primary",

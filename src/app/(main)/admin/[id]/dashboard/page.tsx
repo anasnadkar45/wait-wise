@@ -5,6 +5,8 @@ import { ProjectOverview } from "@/app/components/dashboard/ProjectOverview"
 import { StatCard } from "@/app/components/dashboard/StatCard"
 import { RecentSubmissions } from "@/app/components/dashboard/RecentSubmissions"
 import { SignupChart } from "@/app/components/dashboard/SignupChart"
+import { getUserData } from "@/app/utils/hooks"
+import { AIProjectAnalysis } from "@/app/components/project/AIProjectAnalysis"
 
 export const getProjectData = async (id: string) => {
   return await prisma.project.findUnique({
@@ -27,6 +29,13 @@ export const getProjectData = async (id: string) => {
 
 const Dashboard = async ({ params }: { params: { id: string } }) => {
   const projectData = await getProjectData(params.id)
+    const user = await getUserData()
+  
+    if (!projectData) {
+      return <div>Project not found</div>
+    }
+  
+    const isProjectOwner = user.userId === projectData.userId
 
   if (!projectData) {
     return <div>Project not found</div>
@@ -57,7 +66,7 @@ const Dashboard = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="space-y-4 ">
       <div>
-        
+        {isProjectOwner && <AIProjectAnalysis project={projectData as any} />}
       </div>
       <div className="grid md:grid-cols-2 gap-4">
         <ProjectOverview project={projectData as any} />
