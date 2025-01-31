@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 
 export const ShareCard = ({project}:{project:ProjectType}) => {
     const [copied, setCopied] = useState(false)
-    const shareUrl = `/${project?.handle}`
+    const shareUrl = `https://wait-wise.vercel.app/${project?.handle}`
 
     const handleCopyClick = () => {
         if (project?.handle) {
